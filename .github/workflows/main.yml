@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Use Node.js
         uses: actions/setup-node@v4
-        with:
-          variable: thisdoesntmatteribelieve
+        # with:
+          # variable: thisdoesntmatteribelieve # This totally matters
 
       - run: npm install
 

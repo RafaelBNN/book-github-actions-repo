@@ -18,6 +18,10 @@ on:
         required: true
 
 jobs:
+  test_inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ github.event.inputs.input1 }} | ${{ github.event.inputs.input2 }}"
   build:
     runs-on: ubuntu-latest
     steps:

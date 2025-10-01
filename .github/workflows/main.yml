@@ -19,7 +19,7 @@ on:
       my_name:
         type: string
         required: true
-        default: "Berber"
+        default: "Rafael Bernardo"
 
 jobs:
   test_inputs:

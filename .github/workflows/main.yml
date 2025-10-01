@@ -8,6 +8,14 @@ on:
     branches: [ main ]
     
   workflow_dispatch:
+    inputs:
+      input1:
+        description: "Input 1"
+        required: true
+        default: "creu"
+      input2:
+        description: "Input 2"
+        required: true
 
 jobs:
   build:

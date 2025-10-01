@@ -1,4 +1,4 @@
-name: My First Workflow
+run-name: Primeiro Workflow do grande ${{ github.event.inputs.my_name }}
 
 on:
   push:
@@ -16,6 +16,10 @@ on:
       input2:
         description: "Input 2"
         required: true
+      my_name:
+        type: string
+        required: true
+        default: "Berber"
 
 jobs:
   test_inputs:

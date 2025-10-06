@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Say hello"
-        runs: echo "Hello"
+        run: echo "Hello"
       # checkout your code with your git history
       - uses: actions/checkout@v4
         with:

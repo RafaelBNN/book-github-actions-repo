@@ -5,6 +5,8 @@ jobs:
     name: Check PR size doesn't break set limit
     runs-on: ubuntu-latest
     steps:
+      - name: "Say hello"
+        run: echo "Hello"
       # checkout your code with your git history
       - uses: actions/checkout@v4
         with:

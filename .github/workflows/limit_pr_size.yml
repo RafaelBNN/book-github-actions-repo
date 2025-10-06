@@ -1,8 +1,5 @@
 name: PR Size Checker
-on:
-  push:
-    branches:
-      - main
+on: pull_request
 jobs:
   check_pr_size:
     name: Check PR size doesn't break set limit

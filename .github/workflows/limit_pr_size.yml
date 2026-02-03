@@ -19,7 +19,12 @@ jobs:
         id: changed-lines
         uses: hestonhoffman/changed-lines@v1
       - name: Fail if number of lines changed exceeds ${{ env.SIZE_LIMIT }}
+        env:
+          # Map the GitHub output to a shell variable here
+          CHANGED_LINES_DATA: ${{ steps.changed-lines.outputs.changed_lines }}
         run: |
+          echo "DEBUG: The content of changed_lines is:"
+          echo "$CHANGED_LINES_DATA"
           if [ ${{ steps.changed-lines.outputs.changed_lines }} -gt ${{ env.SIZE_LIMIT }} ]; then
             exit 1
           fi

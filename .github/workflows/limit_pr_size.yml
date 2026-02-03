@@ -21,10 +21,18 @@ jobs:
       - name: Fail if number of lines changed exceeds ${{ env.SIZE_LIMIT }}
         env:
           # Map the GitHub output to a shell variable here
-          CHANGED_LINES_DATA: ${{ steps.changed-lines.outputs.changed_lines }}
+          CHANGED_LINES_JSON: ${{ steps.changed-lines.outputs.changed_lines }}
         run: |
-          echo "DEBUG: The content of changed_lines is:"
-          echo "$CHANGED_LINES_DATA"
-          if [ ${{ steps.changed-lines.outputs.changed_lines }} -gt ${{ env.SIZE_LIMIT }} ]; then
+          TOTAL_LINES=$(echo "$CHANGED_LINES_JSON" | jq 'map(length) | add // 0')
+
+          echo "DEBUG: Raw JSON: $CHANGED_LINES_JSON"
+          echo "Total lines changed: $TOTAL_LINES"
+          echo "Limit allowed: ${{ env.SIZE_LIMIT }}"
+
+          # 2. Compare the calculated total against your limit
+          if [ "$TOTAL_LINES" -gt "${{ env.SIZE_LIMIT }}" ]; then
+            echo "❌ Error: PR size ($TOTAL_LINES lines) exceeds limit (${{ env.SIZE_LIMIT }})."
             exit 1
+          else
+            echo "✅ Success: PR size is within limits."
           fi

@@ -1,5 +1,10 @@
 name: PR Size Checker
+
 on: pull_request
+
+env:
+  SIZE_LIMIT: 2
+
 jobs:
   check_pr_size:
     name: Check PR size doesn't break set limit
@@ -7,10 +12,27 @@ jobs:
     steps:
       - name: "Say hello"
         run: echo "Hello"
-      # checkout your code with your git history
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: maidsafe/pr_size_checker@v3
-        with:
-          max_lines_changed: 10
+      - name: Get number of changed lines
+        id: changed-lines
+        uses: hestonhoffman/changed-lines@v1
+      - name: Fail if number of lines changed exceeds ${{ env.SIZE_LIMIT }}
+        env:
+          # Map the GitHub output to a shell variable here
+          CHANGED_LINES_JSON: ${{ steps.changed-lines.outputs.changed_lines }}
+        run: |
+          TOTAL_LINES=$(echo "$CHANGED_LINES_JSON" | jq 'map(length) | add // 0')
+
+          echo "DEBUG: Raw JSON: $CHANGED_LINES_JSON"
+          echo "Total lines changed: $TOTAL_LINES"
+          echo "Limit allowed: ${{ env.SIZE_LIMIT }}"
+
+          # 2. Compare the calculated total against your limit
+          if [ "$TOTAL_LINES" -gt "${{ env.SIZE_LIMIT }}" ]; then
+            echo "❌ Error: PR size ($TOTAL_LINES lines) exceeds limit (${{ env.SIZE_LIMIT }})."
+            exit 1
+          else
+            echo "✅ Success: PR size is within limits."
+          fi
